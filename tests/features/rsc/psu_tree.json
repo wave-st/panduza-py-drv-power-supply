@@ -1,0 +1,20 @@
+{
+    "machine": "test_psu",
+    "brokers": {
+        "test_broker": {
+            "addr": "localhost",
+            "port": 1883,
+            "interfaces": [
+                {
+                    "name": "psu_test",
+                    "driver": "psu_hm7044",
+                    "settings": {
+                        "serial_port" : "/dev/ttyACM0",
+                        "channel" : 1
+                    }
+                }
+            ]
+        }
+    }
+}
+
