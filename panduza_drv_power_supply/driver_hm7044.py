@@ -33,7 +33,7 @@ class DriverHm7044(MetaDriver):
         self.channel = tree["settings"]["channel"]
 
         # 
-        self.__serial = serial.Serial(self.serial_port, 9600, timeout=1)
+        # self.__serial = serial.Serial(self.serial_port, 9600, timeout=1)
 
         # Register commands
         self.register_command("enable/set", self.__set_enable)
