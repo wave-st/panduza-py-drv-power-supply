@@ -1,9 +1,9 @@
 import time
 import serial
 from loguru import logger
-from pza_platform import MetaDriver
+from panduza_platform import MetaDriverPowerSupply
 
-class DriverHm7044(MetaDriver):
+class DriverHm7044(MetaDriverPowerSupply):
     """ Driver to manage the HM7044 power supply
     """
 
@@ -31,6 +31,11 @@ class DriverHm7044(MetaDriver):
         # Initialize variables
         self.serial_port = tree["settings"]["serial_port"]
         self.channel = tree["settings"]["channel"]
+
+        #
+        self.enable=False
+        self.volts=0
+        self.amps=0
 
         # 
         # self.__serial = serial.Serial(self.serial_port, 9600, timeout=1)
@@ -67,29 +72,26 @@ class DriverHm7044(MetaDriver):
     def __set_enable(self, payload):
         """
         """
+        # Parse request
+        req = self.payload_to_dict(payload)
+        req_enable = req["enable"]
+        self.enable=req_enable
 
-        # message_on = bytearray(b'EN\r\n')
-        # read_v = bytearray(b'\r\n')
-        # ser.write(message_on)
+        try:
+                        
+            # message_on = bytearray(b'EN\r\n')
+            # read_v = bytearray(b'\r\n')
+            # ser.write(message_on)
 
-    #     # Parse request
-    #     req = self.payload_to_dict(payload)
-    #     req_value = req["value"]
-    #     self.value=req_value
+            # Update mqtt
+            self.push_power_supply_enable(self.enable)
 
-    #     try:
-    #         path = "/sys/class/gpio/gpio%s/value" % self.id
-    #         f = open(path, "w")         
-    #         # Update value
-    #         f.write(str(self.value))
-    #         self.push_io_value(self.value)
-    #         # log
-    #         logger.info(f"new value : {self.value}")
+            # log
+            logger.info(f"new enable : {self.enable}")
 
-    #         f.close()
-    #     except IOError as e:
-    #         # mogger.error("Unable to set value %s to GPIO %s (%s) | %s", str(val), self.id, path, repr(e))
-        pass
+        except IOError as e:
+            # mogger.error("Unable to set value %s to GPIO %s (%s) | %s", str(val), self.id, path, repr(e))
+            pass
 
     ###########################################################################
     ###########################################################################
@@ -97,22 +99,26 @@ class DriverHm7044(MetaDriver):
     def __set_volts(self, payload):
         """
         """
-    #     # Parse request
-    #     req = self.payload_to_dict(payload)
-    #     req_direction = req["direction"]
-    #     # Update direction
-    #     self.direction=req_direction
-    #     # log
-    #     logger.info(f"new direction : {self.direction}")
+        # Parse request
+        req = self.payload_to_dict(payload)
+        req_volts = req["volts"]
+        self.volts=req_volts
 
-    #     try:
-    #         f = open("/sys/class/gpio/gpio%s/direction" % self.id, "w")
-    #         f.write(self.direction)
-    #         self.push_io_direction(self.direction)
-    #         f.close()
-    #     except IOError:
-    #         # mogger.error("Unable to export set value")
-        pass
+        try:
+                        
+            # message_on = bytearray(b'EN\r\n')
+            # read_v = bytearray(b'\r\n')
+            # ser.write(message_on)
+
+            # Update mqtt
+            self.push_power_supply_volts(self.volts)
+
+            # log
+            logger.info(f"new volts : {self.volts}")
+
+        except IOError as e:
+            # mogger.error("Unable to set value %s to GPIO %s (%s) | %s", str(val), self.id, path, repr(e))
+            pass
 
     ###########################################################################
     ###########################################################################
@@ -120,54 +126,25 @@ class DriverHm7044(MetaDriver):
     def __set_amps(self, payload):
         """
         """
+        # Parse request
+        req = self.payload_to_dict(payload)
+        req_amps = req["amps"]
+        self.amps=req_amps
 
-        pass
-    
+        try:
 
-    # ###########################################################################
-    # ###########################################################################
+            # message_on = bytearray(b'EN\r\n')
+            # read_v = bytearray(b'\r\n')
+            # ser.write(message_on)
 
-    # def __push_attribute_value(self):
-    #     """ To read and push value attribute of the gpio
-    #     """
-    #     if self.direction == 'out':
-    #         return
+            # Update mqtt
+            self.push_power_supply_amps(self.amps)
 
-    #     try:
-    #         # Read the value from the driver
-    #         f = open("/sys/class/gpio/gpio%s/value" % self.id, "r")
-    #         value = f.read(1)
-    #         f.close()
-    #         value = int(value)
+            # log
+            logger.info(f"new amps : {self.amps}")
 
-    #         # Push the attribute if it changed
-    #         if self.value != value:
-    #             self.value = value
-    #             logger.debug("gpio '{}' value modified : {}", self.name, self.value)
-    #             self.push_io_value(self.value)
-    #     except IOError as e:
-    #         logger.error("Unable to get value %s", repr(e))
-
-    # ###########################################################################
-    # ###########################################################################
-
-    # def __push_attribute_direction(self):
-    #     """ To read and push direction attribute of the gpio
-    #     """
-    #     try:
-    #         # Read the direction from the driver
-    #         f = open("/sys/class/gpio/gpio%s/direction" % self.id, "r")
-    #         direction = f.read()
-    #         f.close()
-    #         direction = direction.rstrip("\n")
-
-    #         # Push the attribute if it changed
-    #         if self.direction != direction:
-    #             self.direction = direction
-    #             logger.debug("gpio '{}' direction modified : {}", self.name, self.direction)
-    #             self.push_io_direction(self.direction)
-    #     except IOError:
-    #         logger.error("Unable to get direction %s", repr(e))
-
+        except IOError as e:
+            # mogger.error("Unable to set value %s to GPIO %s (%s) | %s", str(val), self.id, path, repr(e))
+            pass
 
 
