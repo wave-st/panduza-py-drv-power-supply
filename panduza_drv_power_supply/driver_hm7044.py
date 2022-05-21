@@ -1,9 +1,9 @@
 import time
 import serial
 from loguru import logger
-from panduza_platform import MetaDriverPowerSupply
+from panduza_platform import MetaDriverPsu
 
-class DriverHm7044(MetaDriverPowerSupply):
+class DriverHm7044(MetaDriverPsu):
     """ Driver to manage the HM7044 power supply
     """
 
@@ -15,7 +15,7 @@ class DriverHm7044(MetaDriverPowerSupply):
         """
         return {
             "compatible": "psu_hm7044",
-            "info": { "type": "power_supply", "version": "1.0" },
+            "info": { "type": "psu", "version": "1.0" },
             "settings": {
                 "serial_port" : "Serial port on which the power supply is connected",
                 "channel" : "Channel number that must be driven by this interfaces [1,2,3,4]"
