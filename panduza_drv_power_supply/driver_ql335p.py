@@ -34,15 +34,15 @@ class DriverQL335P(MetaDriverPsu):
         """ FROM MetaDriver
         """
         # Initialize variables
-        # self.supported_settings = self.api_settings.copy()
+        self.supported_settings = self.api_settings.copy()
 
-        # self.api_attributes["volts"]["max"] = 30
-        # self.api_attributes["volts"]["scale"] = 0.01
+        self.api_attributes["volts"]["max"] = 30
+        self.api_attributes["volts"]["scale"] = 0.01
 
-        # self.api_attributes["amps"]["max"] = 5
-        # self.api_attributes["amps"]["scale"] = 0.001
+        self.api_attributes["amps"]["max"] = 5
+        self.api_attributes["amps"]["scale"] = 0.001
         
-        # self.api_attributes["model_name"] = "QL335P"
+        self.api_attributes["model_name"] = "QL335P"
 
         if "serial_port" not in tree["settings"]:
             logger.error("Setting serial_port is mandatory for this driver")
@@ -71,8 +71,6 @@ class DriverQL335P(MetaDriverPsu):
 
         self.tree_settings = tree["settings"].copy()
 
-        self.__serial = serial.Serial(self.serial_port, 9600, timeout=1)
-
         # Register commands
         self.psu_register_command("state", self.__set_state)
         self.psu_register_command("volts", self.__set_volts)
@@ -91,6 +89,7 @@ class DriverQL335P(MetaDriverPsu):
     ###########################################################################
 
     def on_start(self):
+        self.dev.open()
         super().on_start()
         pass
 
